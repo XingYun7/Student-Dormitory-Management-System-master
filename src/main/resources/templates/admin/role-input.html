@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${operation}">真实标题</title>
+    <!--导入网页图标 -->
+    <link rel="icon" href="../../static/favicon.ico" th:href="@{/favicon.ico}" type="image/x-icon">
+    <!--导入网页图标 -->
+    <link rel="shortcut icon" href="../../static/favicon.ico" th:href="@{/favicon.ico}" type="image/x-icon">
+    <!--导入layUI css库 -->
+    <link rel="stylesheet" href="../../static/lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}"
+          media="all">
+    <!--导入公共的css，其中可定义整个网页的配色方案 -->
+    <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 页面的header -->
+    <div th:replace="admin/_fragments :: admin-header" class="layui-header">
+        <a href="javascript:void(0)">
+            <div id="l-logo" class="layui-logo">学生住宿管理系统</div>
+        </a>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a class="layui-icon layui-icon-shrink-right" href="javascript:void(0)"></a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:void(0)">
+                    <img src="../../static/images/default.ico"
+                         th:src="${(session.currentUser==null||session.currentUser.avatar==null||session.currentUser.avatar=='')?'/images/avatar.jpg':session.currentUser.avatar}"
+                         class="layui-nav-img" alt="">
+                    <span th:text="${session.currentUser==null?'未登录':(session.currentUser.username==null?'':session.currentUser.username)}">用户名</span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/user">个人中心</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/logout">安全退出</a></li>
+        </ul>
+    </div>
+    <!-- 页面的menu/左边的导航栏 -->
+    <div th:replace="admin/_fragments :: admin-menu" id="div_side_bg" class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="nav-dom">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:void(0)">系统管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/user-list}">用户列表</a></dd>
+                        <!--<dd><a href="javascript:void(0)" th:href="@{/admin/role-list}">角色与权限</a></dd>-->
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:void(0)">学生管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/student-list}">学生列表</a></dd>
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/teaching-class-list}">教学班级</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:void(0)">宿舍管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/room-list}">寝室列表</a></dd>
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/category-list}">寝室类型</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:void(0)">入住管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/room-request-list}" id="c_y">住宿申请<span
+                                class="layui-badge" th:text="${session.noHandleCount==null?'0':session.noHandleCount}">6</span></a></dd>
+                        <dd><a href="javascript:void(0)" th:href="@{/admin/allocation-list}">宿舍分配详情</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="width: 100%;height:98%;padding-left: 15px;padding-top: 10px;">// 在这里写页面的主体内容</div>
+    </div>
+    <div th:replace="admin/_fragments :: admin-footer" class="layui-footer" id="sdms-footer"></div>
+</div>
+<!--导入footer -->
+<script src="../../static/js/footer.js" th:src="@{/js/footer.js}"></script>
+<!--导入jQuery库 -->
+<script src="../../static/lib/jQuery/jquery-3.5.1.min.js" th:src="@{/lib/jQuery/jquery-3.5.1.min.js}"></script>
+<!--导入cookie库 -->
+<script src="../../static/lib/cookie/js.cookie-2.2.1.min.js" th:src="@{/lib/cookie/js.cookie-2.2.1.min.js}"></script>
+<!--导入layUI js库 -->
+<script src="../../static/lib/layui/layui.js" th:src="@{/lib/layui/layui.js}"></script>
+<!--导入公共的js，其中实现了菜单按钮的点击事件-->
+<script src="../../static/js/common.js" th:src="@{/js/common.js}"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        // ToDo
+    });
+</script>
+</body>
+</html>

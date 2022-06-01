@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生住宿管理系统前台</title>
+    <link rel="icon" href="../static/favicon.ico" th:href="@{/favicon.ico}" type="image/x-icon">
+    <!--导入网页图标 -->
+    <link rel="shortcut icon" href="../static/favicon.ico" th:href="@{/favicon.ico}" type="image/x-icon">
+    <!--导入网页图标 -->
+    <script src="../static/lib/jQuery/jquery-3.5.1.min.js" th:src="@{/lib/jQuery/jquery-3.5.1.min.js}"></script>
+    <!--导入jQuery库 -->
+    <script src="../static/lib/layui/layui.js" th:src="@{/lib/layui/layui.js}"></script>
+    <!--导入layUI库 -->
+    <script src="../static/lib/cookie/js.cookie-2.2.1.min.js" th:src="@{/lib/cookie/js.cookie-2.2.1.min.js}"></script>
+    <!--导入cookie库 -->
+    <link rel="stylesheet" href="../static/lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}" media="all">
+    <!--导入layUI css库 -->
+    <link rel="stylesheet" href="../static/css/common.css" th:href="@{/css/common.css}">
+    <!--导入公共的css，其中可定义整个网页的配色方案 -->
+    <link rel="stylesheet" href="../static/css/index.css" th:href="@{/css/index.css}">
+</head>
+
+<body>
+<div>
+    <ul class="layui-nav" lay-filter="" style="position: fixed;top:0;left: 0;right: 0;z-index: 1000;">
+        <li class="layui-nav-item"><a href="" id="hover_div" style="font-size:large">&nbsp;学生住宿管理系统</a></li>
+        <li class="layui-nav-item "><a href="javascript:void(0)"><span id="i_room"
+                                                                       th:text="${currentRoom==null?'未安排宿舍':'我的寝室:'+currentRoom.name}">XXX</span></a>
+            <dl class="layui-nav-child">
+                <dd><img src="../static/images/default.ico"
+                         th:src="${currentRoom==null?'/images/no.png':((currentRoom.picture==null||currentRoom.picture=='')?'/images/no.png':currentRoom.picture)}"
+                         alt="">
+                </dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item layui-layout-right" style="margin-right: 100px;">
+            <a href="javascript:void(0)">
+                <img src="../static/images/default.ico"
+                     th:src="${(session.currentUser==null||session.currentUser.avatar==null||session.currentUser.avatar=='')?'/images/avatar.jpg':session.currentUser.avatar}"
+                     class="layui-nav-img" alt="">
+                <span th:text="${session.currentUser==null?'未登录':(session.currentUser.username==null?'':session.currentUser.username)}">用户名</span>
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="" th:href="@{/user}">个人中心</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item layui-layout-right"><a href="/logout">安全退出</a></li>
+    </ul>
+</div>
+
+<div style="position: absolute;left: 60px;right:60px;top:0;bottom:0;padding-top: 10px;background-color: rgb(246, 251, 255);">
+
+    <div class="layui-col-md12"
+         style="padding: 30px;">
+
+        <!-- 内容主体区域 -->
+        <div style="padding-left: 15px;padding-top: 10px">
+
+            <div id="search_div" style="margin-top: 10px;padding-top: 10px;">
+
+                <div class="layui-form layui-form-item  layui-inline" style="margin-bottom: 0">
+                    <label for="search_by_key_word"></label>
+                    <input class="layui-input" name="searchName" placeholder="请输入寝室名" id="search_by_key_word"
+                           autocomplete="off">
+                </div>
+
+                <div class="layui-form layui-form-item  layui-inline" style="margin-bottom: 0">
+                    <label for="search_by_select"></label>
+                    <select class="layui-input" id="search_by_select" style="width: 200px;">
+                        <option value="" selected="selected">不限类型</option>
+                        <option value="" th:each="category:${categories}" th:value="${category.id}"
+                                th:text="${category.name}">四人寝
+                        </option>
+                    </select>
+                </div>
+                <button class="layui-btn" id="search_by_room_name_btn" data-type="reload">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
+            <!-- layUI渲染的表格组件 -->
+            <table class="layui-hide" id="test" lay-filter="test"></table>
+
+        </div>
+        <input id="student_id" type="hidden" th:value="${session.currentUser==null?'未登录':session.currentUser.username}">
+    </div>
+
+</div>
+
+<div class="layui-footer" id="sdms-footer"></div>
+<script src="../static/js/footer.js" th:src="@{/js/footer.js}"></script>
+<!-- 表格组件内部的操作按钮 -->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"> 申请入住 </a>
+</script>
+<!-- layUI执行脚本,预先加载 -->
+<script>
+    layui.use(['element', 'layer', 'form', 'table'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        table.render({
+            elem: '#test',
+            url: "/admin/rooms",
+            method: 'post',
+            contentType: 'application/json',
+            limit: 10,
+            title: '寝室数据表',
+            cols: [
+                [{
+                    type: 'checkbox',
+                    fixed: 'left'
+                }, {
+                    field: 'id',
+                    title: '寝室ID',
+                    width: 150
+                }, {
+                    field: 'categoryName',
+                    title: '类型',
+                    width: 150,
+                    sort: true
+                }, {
+                    field: 'name',
+                    title: '寝室名',
+                    width: 150,
+                    sort: true
+                }, {
+                    field: 'address',
+                    title: '地址'
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    width: 100
+                }]
+            ],
+            page: true,
+            id: 'table_id'
+        });
+
+        //表格渲染重载,通过where字段传递查询条件 searchName
+        var $ = layui.$;
+        var active = {
+            reload: function () {
+                //执行重载
+                table.reload('table_id', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    where: {
+                        //查询条件
+                        queryType: 0,
+                        param: {
+                            roomId: "",
+                            keyWord: $("#search_by_key_word").val(),
+                            categoryId: $("#search_by_select").val(),
+                        }
+
+                        //这里可以传对象
+                    }
+                });
+            }
+        };
+        //搜索框点击事件
+        $('#search_by_room_name_btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                if ($("#i_room").text() !== '未安排宿舍') {
+                    layer.msg("您已经被安排了宿舍，不要重复申请", {icon: 2, offset: 't', time: 1000})
+                } else {
+                    $.get("/room-request/new?studentId=" + $("#student_id").val() + "&" + "roomId=" + data.id, function (resp) {
+                        if (resp.code === 0) {
+                            layer.msg("申请发送成功", {icon: 1, offset: 't', time: 2000});
+                        } else {
+                            layer.msg("申请发送失败", {icon: 2, offset: 't', time: 2000});
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+#sdms-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 44px;
+    line-height: 44px;
+    padding: 0 15px;
+    background-color: #eee;
+}
+
+#search_input {
+    height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    background-color: rgba(255, 255, 255, .05);
+    border: none 0;
+    color: #fff;
+    color: rgba(255, 255, 255, .5);
+    font-size: 12px;
+    width: 350px;
+}
+
+#search_input_btn {
+    cursor: pointer;
+    height: 30px;
+    background-color: #393D49;
+    border: none 0;
+    color: #fff;
+    color: rgba(255, 255, 255, .5);
+    font-size: 12px;
+    width: 30px;
+}
+
+#search_input_btn:hover {
+    background-color: #424652;
+}
+
+p.book_name {
+    margin-left: 10px;
+    color: #614e3c;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+p.book_writer {
+    margin-left: 10px;
+    margin-top:8px;
+    color: #5a524a;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#book_list li{
+    display: inline;
+    float: left;
+
+}
+
+.type_list li{
+    margin-top:15px;
+}
+
+.type_list li a{
+   cursor: pointer;
+   color: #27a;
+}
+
+.t_s_l_b{
+    font: 24px Arial, Helvetica, sans-serif;
+    color: #072;
+    margin: 0 0 12px 0;
+    line-height: 150%;
+}
+
+#type_b li{
+    display: inline;
+    float: left;
+    margin-top: 10px;
+}
+

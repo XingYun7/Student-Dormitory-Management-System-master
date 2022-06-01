@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "picture.path",
+      "type": "java.lang.String",
+      "description": "The local absolute path where the image is stored."
+    }
+  ]
+}
