@@ -83,17 +83,6 @@ yml文件的语法    https://www.cnblogs.com/lxhaaron/p/12807473.html
 (6)jQuery 简化Dom操作与Ajax请求
 ```
 
-
-### 项目预览：
-
-![登录页面](./picture-path/Login-Pic.png)
-![后台管理页面](./picture-path/Admin-Pic.png)
-![学生自选宿舍页面](./picture-path/Student-Pic.png)
-![用户个人信息页面](./picture-path/Info-Pic.png)
-![宿舍分配页面](./picture-path/Room-Pic.png)
-
-
-
 ### 项目评价： 
 
 ```
@@ -103,8 +92,5 @@ yml文件的语法    https://www.cnblogs.com/lxhaaron/p/12807473.html
 
 代码的架构比较混乱，controller层包含了大量的业务逻辑，可拓展性比较差。  
 ```
-
-最近学习了一下queryDSL，想起了大四的时候做的这个程序，于是重构了一下后端的代码
-
 
 
